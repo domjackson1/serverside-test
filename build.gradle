@@ -56,9 +56,10 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web")
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompile('com.jayway.jsonpath:json-path')
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.jsoup:jsoup:1.11.3'
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'com.jayway.jsonpath:json-path'
     testCompile 'io.cucumber:cucumber-java8:2.4.0'
     testCompile 'io.cucumber:cucumber-junit:2.4.0'
     testCompile 'info.cukes:cucumber-spring:1.2.4'
