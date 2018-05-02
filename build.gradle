@@ -61,6 +61,7 @@ dependencies {
     compile 'org.apache.logging.log4j:log4j-api:2.11.0'
     compile 'org.apache.logging.log4j:log4j-core:2.11.0'
     compile 'commons-validator:commons-validator:1.4.0'
+    compile 'com.fasterxml:jackson-module-json-org:0.9.1'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile 'com.jayway.jsonpath:json-path'
