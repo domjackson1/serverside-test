@@ -14,13 +14,17 @@ public class HtmlScraper {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
+    public static final String BAD_URL_MESSAGE = "Invalid URL";
+
+    public static final String BASE_URL = "https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk";
+
     private static final String[] schemes = {"http","https"};
     private UrlValidator urlValidator = new UrlValidator(schemes);
 
     public Document getHtmlDocument(String url) throws IOException {
 
         if (!isValidUrl(url)) {
-            LOGGER.error("Invalid URL");
+            LOGGER.error(BAD_URL_MESSAGE);
             throw new IllegalArgumentException();
         }
 
