@@ -1,6 +1,5 @@
 package io.github.domjackson1.groceryscraper.scrapers;
 
-import io.github.domjackson1.groceryscraper.scrapers.HtmlScraper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
