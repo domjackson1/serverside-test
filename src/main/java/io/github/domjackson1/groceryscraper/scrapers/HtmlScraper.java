@@ -1,4 +1,4 @@
-package io.github.domjackson1.groceryscraper;
+package io.github.domjackson1.groceryscraper.scrapers;
 
 import org.apache.commons.validator.routines.UrlValidator;
 import org.jsoup.Jsoup;

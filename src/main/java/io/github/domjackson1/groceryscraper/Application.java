@@ -1,5 +1,6 @@
 package io.github.domjackson1.groceryscraper;
 
+import io.github.domjackson1.groceryscraper.scrapers.ProductScraper;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
