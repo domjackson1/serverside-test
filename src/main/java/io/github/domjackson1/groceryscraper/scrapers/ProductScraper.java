@@ -1,7 +1,6 @@
 package io.github.domjackson1.groceryscraper.scrapers;
 
 import io.github.domjackson1.groceryscraper.Product;
-import io.github.domjackson1.groceryscraper.scrapers.HtmlScraper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -11,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +17,7 @@ import java.util.List;
 public class ProductScraper extends HtmlScraper {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    public static final String BASE_URL = "https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk";
 
     public List<Product> getProducts(String url) throws IOException {
 
@@ -39,8 +38,13 @@ public class ProductScraper extends HtmlScraper {
         return Jsoup.connect(url).get();
     }
 
-    public Elements getProductItemsHtmlElements(Document productListings) {
+    public static Elements getProductItemsHtmlElements(Document productListings) {
         return productListings.select("ul.productLister li.gridItem .product");
     }
+
+    public static String getTitleFromProduct(Element productItem) {
+        return productItem.select("h3 a").text();
+    }
+
 
 }

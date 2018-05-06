@@ -2,6 +2,7 @@ package io.github.domjackson1.groceryscraper.scrapers;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,11 +41,20 @@ public class TestProductScraper {
 
     @Test
     public void shouldReturnListOfProductDivsFromPage() {
-
-        Elements productItems = productScraper.getProductItemsHtmlElements(productListings);
+        Elements productItems = ProductScraper.getProductItemsHtmlElements(productListings);
 
         assertEquals(expectedProductItems.toString(), productItems.toString());
     }
 
+    @Test
+    public void shouldReturnProductTitleFromProductElement() {
+        Elements productItems = ProductScraper.getProductItemsHtmlElements(productListings);
+        Element productItem = productItems.first();
+
+        String title = ProductScraper.getTitleFromProduct(productItem);
+        String expectedTitle = "Test Product 1 500g";
+
+        assertEquals(title, expectedTitle);
+    }
 
 }
