@@ -1,9 +1,11 @@
 package io.github.domjackson1.groceryscraper.scrapers;
 
+import io.github.domjackson1.groceryscraper.Product;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
@@ -116,7 +119,6 @@ public class TestProductScraper {
         String expectedAbsoluteUrl = "http://www.online-shop.co.uk/2";
 
         assertEquals(expectedAbsoluteUrl, absoluteUrl);
-
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -124,5 +126,17 @@ public class TestProductScraper {
         String relativeUrl = "../../shop/gb/test-product-3-200g.html";
 
         String absoluteUrl = productScraper.convertRelativeToAbsoluteUrl("malformedUrl", relativeUrl);
+    }
+
+    @Test
+    public void shouldReturnANewProduct() throws IOException {
+        Elements productItems = ProductScraper.getProductItemsHtmlElements(productListings);
+        Element productItem = productItems.first();
+
+        Product expectedProduct = new Product("Test Product 1 500g", "Test description", new BigDecimal("1.75"), 100);
+
+        Product product = productScraper.getProduct(productItem);
+
+        Assert.assertThat(product, samePropertyValuesAs(expectedProduct));
     }
 }

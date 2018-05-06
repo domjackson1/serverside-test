@@ -47,6 +47,16 @@ public class ProductScraper extends HtmlScraper {
         return productListings.select("ul.productLister li.gridItem .product");
     }
 
+    public Product getProduct(Element productItem) throws IOException {
+        String title = getTitleFromProduct(productItem);
+        BigDecimal price = getPriceFromProduct(productItem);
+
+        String relativeUrl = getRelativeProductUrlFromProduct(productItem);
+        String absoluteUrl = convertRelativeToAbsoluteUrl(BASE_URL, relativeUrl);
+
+        return new Product(title, "Test description", price, 100);
+    }
+
     public static String getTitleFromProduct(Element productItem) {
         return productItem.select("h3 a").text();
     }
