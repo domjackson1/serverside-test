@@ -64,7 +64,6 @@ dependencies {
     compile 'com.fasterxml:jackson-module-json-org:0.9.1'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
-    testCompile 'com.jayway.jsonpath:json-path'
     testCompile 'io.cucumber:cucumber-java8:2.4.0'
     testCompile 'io.cucumber:cucumber-junit:2.4.0'
     testCompile 'info.cukes:cucumber-spring:1.2.4'
