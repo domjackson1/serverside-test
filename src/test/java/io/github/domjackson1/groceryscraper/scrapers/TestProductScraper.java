@@ -37,7 +37,6 @@ public class TestProductScraper {
 
         File productItemsHtmlFile = new ClassPathResource("ProductItems.html").getFile();
         expectedProductItems = Jsoup.parse(productItemsHtmlFile, "UTF-8").select("div.product");
-
     }
 
     @Test
@@ -55,7 +54,7 @@ public class TestProductScraper {
         String title = ProductScraper.getTitleFromProduct(productItem);
         String expectedTitle = "Test Product 1 500g";
 
-        assertEquals(title, expectedTitle);
+        assertEquals(expectedTitle, title);
     }
 
     @Test
@@ -66,7 +65,7 @@ public class TestProductScraper {
         BigDecimal price = ProductScraper.getPriceFromProduct(productItem);
         BigDecimal expectedPrice = new BigDecimal("1.75");
 
-        assertEquals(price, expectedPrice);
+        assertEquals(expectedPrice, price);
     }
 
     @Test
@@ -77,8 +76,7 @@ public class TestProductScraper {
         BigDecimal priceOfProdctTwo = ProductScraper.getPriceFromProduct(productItemTwo);
         BigDecimal expectedPrice = new BigDecimal("2.00");
 
-        assertEquals(priceOfProdctTwo, expectedPrice);
-
+        assertEquals(expectedPrice, priceOfProdctTwo);
     }
 
     @Test(expected = NumberFormatException.class)
@@ -87,7 +85,44 @@ public class TestProductScraper {
         Element productItemThree = productItems.get(2);
 
         BigDecimal priceOfProdctThree = ProductScraper.getPriceFromProduct(productItemThree);
+    }
+
+    @Test
+    public void shouldReturnProductUrlFromProductElement() {
+        Elements productItems = ProductScraper.getProductItemsHtmlElements(productListings);
+        Element productItem = productItems.first();
+
+        String relativeUrl = ProductScraper.getRelativeProductUrlFromProduct(productItem);
+        String expectedRelativeUrl = "../../../../../../shop/gb/groceries/berries-cherries-currants/test-product-1-500g.html";
+
+        assertEquals(expectedRelativeUrl, relativeUrl);
+    }
+
+    @Test
+    public void shouldConvertRelativeUrlToAbsoluteUrl() {
+        String relativeUrl = "../../shop/gb/test-product-3-200g.html";
+
+        String absoluteUrl = productScraper.convertRelativeToAbsoluteUrl("http://www.online-shop.co.uk", relativeUrl);
+        String expectedAbsoluteUrl = "http://www.online-shop.co.uk/shop/gb/test-product-3-200g.html";
+
+        assertEquals(expectedAbsoluteUrl, absoluteUrl);
+    }
+
+    @Test
+    public void shouldConvertRelativeUrlToAbsoluteUrlGivenSingleNumberRelativeUrl() {
+        String relativeUrl = "2";
+
+        String absoluteUrl = productScraper.convertRelativeToAbsoluteUrl("http://www.online-shop.co.uk", relativeUrl);
+        String expectedAbsoluteUrl = "http://www.online-shop.co.uk/2";
+
+        assertEquals(expectedAbsoluteUrl, absoluteUrl);
 
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionIfCreatingMalformedUrlGivenBadBaseUrl() {
+        String relativeUrl = "../../shop/gb/test-product-3-200g.html";
+
+        String absoluteUrl = productScraper.convertRelativeToAbsoluteUrl("malformedUrl", relativeUrl);
+    }
 }

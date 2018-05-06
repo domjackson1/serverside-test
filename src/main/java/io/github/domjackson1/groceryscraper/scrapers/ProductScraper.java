@@ -1,6 +1,7 @@
 package io.github.domjackson1.groceryscraper.scrapers;
 
 import io.github.domjackson1.groceryscraper.Product;
+import io.github.domjackson1.groceryscraper.scrapers.HtmlScraper;
 import org.apache.commons.validator.routines.BigDecimalValidator;
 import org.apache.commons.validator.routines.CurrencyValidator;
 import org.jsoup.Jsoup;
@@ -63,5 +64,25 @@ public class ProductScraper extends HtmlScraper {
         return new BigDecimal(priceString);
     }
 
+    public static String getRelativeProductUrlFromProduct(Element productItem) {
+
+        Element anchorElement = productItem.select("h3 a").first();
+
+        return anchorElement.attr("href");
+    }
+
+    public String convertRelativeToAbsoluteUrl(String baseUrl, String relativeUrl) {
+
+        relativeUrl = relativeUrl.replace("../", "");
+
+        String url = String.format("%s/%s", baseUrl, relativeUrl);
+
+        if (!isValidUrl(url)) {
+            LOGGER.error(BAD_URL_MESSAGE);
+            throw new IllegalArgumentException();
+        }
+
+        return url;
+    }
 
 }
