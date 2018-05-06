@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 
 import static org.junit.Assert.assertEquals;
 
@@ -55,6 +56,38 @@ public class TestProductScraper {
         String expectedTitle = "Test Product 1 500g";
 
         assertEquals(title, expectedTitle);
+    }
+
+    @Test
+    public void shouldReturnProductPriceFromProductElement() {
+        Elements productItems = ProductScraper.getProductItemsHtmlElements(productListings);
+        Element productItem = productItems.first();
+
+        BigDecimal price = ProductScraper.getPriceFromProduct(productItem);
+        BigDecimal expectedPrice = new BigDecimal("1.75");
+
+        assertEquals(price, expectedPrice);
+    }
+
+    @Test
+    public void shouldHandleBadPriceFormatNoCurrencyCharacter() {
+        Elements productItems = ProductScraper.getProductItemsHtmlElements(productListings);
+        Element productItemTwo = productItems.get(1);
+
+        BigDecimal priceOfProdctTwo = ProductScraper.getPriceFromProduct(productItemTwo);
+        BigDecimal expectedPrice = new BigDecimal("2.00");
+
+        assertEquals(priceOfProdctTwo, expectedPrice);
+
+    }
+
+    @Test(expected = NumberFormatException.class)
+    public void shouldHandleBadPriceFormatsNotANumber() {
+        Elements productItems = ProductScraper.getProductItemsHtmlElements(productListings);
+        Element productItemThree = productItems.get(2);
+
+        BigDecimal priceOfProdctThree = ProductScraper.getPriceFromProduct(productItemThree);
+
     }
 
 }

@@ -1,6 +1,8 @@
 package io.github.domjackson1.groceryscraper.scrapers;
 
 import io.github.domjackson1.groceryscraper.Product;
+import org.apache.commons.validator.routines.BigDecimalValidator;
+import org.apache.commons.validator.routines.CurrencyValidator;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,8 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Component
 public class ProductScraper extends HtmlScraper {
@@ -44,6 +48,19 @@ public class ProductScraper extends HtmlScraper {
 
     public static String getTitleFromProduct(Element productItem) {
         return productItem.select("h3 a").text();
+    }
+
+    public static BigDecimal getPriceFromProduct(Element productItem) {
+        Element pricePerUnit = productItem.select(".pricePerUnit").first();
+        Elements unit = pricePerUnit.children();
+        unit.remove();
+        String priceString = pricePerUnit.text();
+        BigDecimalValidator validator = CurrencyValidator.getInstance();
+
+        if (!validator.isValid(priceString, Locale.UK)) throw new NumberFormatException();
+
+        priceString = priceString.replace("£", "");
+        return new BigDecimal(priceString);
     }
 
 
