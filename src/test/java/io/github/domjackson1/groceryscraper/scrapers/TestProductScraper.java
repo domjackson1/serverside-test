@@ -32,7 +32,8 @@ public class TestProductScraper {
 
     private Document productListings;
     private Elements expectedProductItems;
-    private Document productPage;
+    private Document productOnePage;
+    private Document productTwoPage;
 
     @Before
     public void setup() throws IOException {
@@ -42,8 +43,11 @@ public class TestProductScraper {
         File productItemsHtmlFile = new ClassPathResource("ProductItems.html").getFile();
         expectedProductItems = Jsoup.parse(productItemsHtmlFile, "UTF-8").select("div.product");
 
-        File productPageHtmlFile = new ClassPathResource("ProductPage.html").getFile();
-        productPage = Jsoup.parse(productPageHtmlFile, "UTF-8");
+        File productOnePageHtmlFile = new ClassPathResource("ProductOnePage.html").getFile();
+        productOnePage = Jsoup.parse(productOnePageHtmlFile, "UTF-8");
+
+        File productTwoPageHtmlFile = new ClassPathResource("ProductTwoPage.html").getFile();
+        productTwoPage = Jsoup.parse(productTwoPageHtmlFile, "UTF-8");
     }
 
     @Test
@@ -107,7 +111,7 @@ public class TestProductScraper {
 
     @Test
     public void shouldReturnProductDescriptionFromProductPage() {
-        String description = ProductScraper.getDescriptionFromProductPage(productPage);
+        String description = ProductScraper.getDescriptionFromProductPage(productOnePage);
         String expectedDescription = "A really good Test Product";
 
         assertEquals(expectedDescription, description);
@@ -115,9 +119,23 @@ public class TestProductScraper {
 
     @Test
     public void shouldNotReturnSecondLineFromProductDescriptionFromProductPage() {
-        String description = ProductScraper.getDescriptionFromProductPage(productPage);
+        String description = ProductScraper.getDescriptionFromProductPage(productOnePage);
         String unexpectedDescription = "Ignored description line";
 
         assertThat(description, not(containsString(unexpectedDescription)));
+    }
+
+    @Test
+    public void shouldReturnKcalValueFromProductPage() throws NoNutritionDataException {
+        int kcalPerHundredGrams = ProductScraper.getKcalPerHundredGramsFromProductPage(productOnePage);
+        int expectedDescription = 33;
+
+        assertEquals(expectedDescription, kcalPerHundredGrams);
+    }
+
+    @Test(expected = NoNutritionDataException.class)
+    public void shouldThrowExceptionIfNoKcalValueFoundOnProductPage() throws NoNutritionDataException {
+        int kcalPerHundredGrams = ProductScraper.getKcalPerHundredGramsFromProductPage(productTwoPage);
+
     }
 }
