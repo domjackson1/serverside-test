@@ -87,4 +87,22 @@ public class ProductScraper extends HtmlScraper {
         return firstNonEmptyTextAfterDescriptionHeader.text();
     }
 
+    public static int getKcalPerHundredGramsFromProductPage(final Element productPage) throws NoNutritionDataException {
+        Element kcalTableElement = productPage.select("td:matches(^.*(kcal).*$)").first();
+
+        if (kcalTableElement == null) throw new NoNutritionDataException();
+
+        String kcalPerHundredGramsString = kcalTableElement.text();
+        kcalPerHundredGramsString = kcalPerHundredGramsString.replace("kcal", "");
+
+        return convertKcalStringToInteger(kcalPerHundredGramsString);
+    }
+
+    public static int convertKcalStringToInteger(final String kcalPerHundredGramsString) {
+
+        String kcalPerHundredGramsStringWithoutUnit = kcalPerHundredGramsString.replace("kcal", "");
+
+        return Integer.parseInt(kcalPerHundredGramsStringWithoutUnit);
+    }
+
 }
