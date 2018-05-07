@@ -43,7 +43,7 @@ public class HtmlScraper {
 
         if (!isValidUrl(url)) {
             LOGGER.error(String.format("%s: %s", BAD_URL_MESSAGE, url));
-            return null;
+            throw new MalformedURLException();
         }
 
         return url;
