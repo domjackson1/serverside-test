@@ -1,4 +1,4 @@
-package io.github.domjackson1.groceryscraper.scrapers;
+package io.github.domjackson1.groceryscraper;
 
 import io.github.domjackson1.groceryscraper.Product;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +15,25 @@ public class Products {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    public List<Product> results = new ArrayList<>();
+    public List<Product> results;
+    public BigDecimal total;
+
+    public Products() {
+        this.results = new ArrayList<>();
+        total = new BigDecimal("0");
+    }
 
     public void addProduct(final Product product) {
         this.results.add(product);
+        updateTotal(product.getUnitPrice());
+    }
+
+    private void updateTotal(BigDecimal unitPrice) {
+        this.total = total.add(unitPrice);
+    }
+
+    public BigDecimal getTotal() {
+        return this.total;
     }
 
     @Override
