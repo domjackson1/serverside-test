@@ -66,7 +66,7 @@ repositories {
 }
 
 sourceCompatibility = 1.8
-targetCompatibility = 1.8S
+targetCompatibility = 1.8
 
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter'
@@ -81,6 +81,5 @@ dependencies {
     testCompile 'io.cucumber:cucumber-java8:2.4.0'
     testCompile 'io.cucumber:cucumber-junit:2.4.0'
     testCompile 'info.cukes:cucumber-spring:1.2.4'
-    testCompile 'org.powermock:powermock-mockito-release-full:1.6.4'
 }
 
