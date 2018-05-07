@@ -15,28 +15,35 @@ public class HtmlScraper {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    public static final String BAD_URL_MESSAGE = "Invalid URL created";
+    public static final String BAD_URL_MESSAGE = "Invalid URL";
 
     private static final String[] schemes = {"http","https"};
     private UrlValidator urlValidator = new UrlValidator(schemes);
 
-    public Document getHtmlDocument(String url) throws IOException {
-        return Jsoup.connect(url).get();
+    public Document getHtmlDocument(final String url) throws IOException {
+
+        try {
+            return Jsoup.connect(url).get();
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(String.format("%s: %s", BAD_URL_MESSAGE, url));
+            return null;
+        }
+
     }
 
-    public boolean isValidUrl(String url) {
+    public boolean isValidUrl(final String url) {
         return this.urlValidator.isValid(url);
     }
 
-    public String convertRelativeToAbsoluteUrl(String baseUrl, String relativeUrl) throws MalformedURLException {
+    public String convertRelativeToAbsoluteUrl(final String baseUrl, final String relativeUrl) throws MalformedURLException {
 
-        relativeUrl = relativeUrl.replace("../", "");
+        String urlPath = relativeUrl.replace("../", "");
 
-        String url = String.format("%s/%s", baseUrl, relativeUrl);
+        String url = String.format("%s/%s", baseUrl, urlPath);
 
         if (!isValidUrl(url)) {
             LOGGER.error(String.format("%s: %s", BAD_URL_MESSAGE, url));
-            throw new MalformedURLException();
+            return null;
         }
 
         return url;
