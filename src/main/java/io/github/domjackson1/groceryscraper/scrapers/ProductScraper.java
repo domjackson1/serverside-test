@@ -1,6 +1,7 @@
 package io.github.domjackson1.groceryscraper.scrapers;
 
 import io.github.domjackson1.groceryscraper.Product;
+import io.github.domjackson1.groceryscraper.Products;
 import org.apache.commons.validator.routines.BigDecimalValidator;
 import org.apache.commons.validator.routines.CurrencyValidator;
 import org.jsoup.nodes.Document;
