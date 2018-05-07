@@ -1,6 +1,5 @@
 package io.github.domjackson1.groceryscraper;
 
-import io.github.domjackson1.groceryscraper.Product;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
 import org.slf4j.Logger;

@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Locale;
 
@@ -21,7 +20,7 @@ public class ProductScraper extends HtmlScraper {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     public static final String BASE_URL = "https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk";
 
-    public Products getProducts(final String url) throws IOException {
+    public Products getProducts(final String url) throws Exception {
 
         Document productListings = getHtmlDocument(url);
         Elements productItems = getProductItemsHtmlElements(productListings);
@@ -42,7 +41,7 @@ public class ProductScraper extends HtmlScraper {
         return productListings.select("ul.productLister li.gridItem .product");
     }
 
-    public Product getProduct(final Element productItem) throws IOException {
+    public static Product getProduct(final Element productItem) throws Exception {
         String title = getTitleFromProduct(productItem);
         BigDecimal price = getPriceFromProduct(productItem);
 

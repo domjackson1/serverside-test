@@ -23,7 +23,7 @@ public class Application implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws IOException {
+    public void run(String... args) throws Exception {
 
         Products products = productScraper.getProducts("https://jsainsburyplc.github.io/serverside-test/site/" +
                 "www.sainsburys.co.uk/webapp/wcs/stores/servlet/gb/groceries/berries-cherries-currants6039.html");

@@ -1,6 +1,5 @@
 package io.github.domjackson1.groceryscraper;
 
-import io.github.domjackson1.groceryscraper.scrapers.ProductScraper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +32,5 @@ public class TestProducts {
         BigDecimal expectedPrice = new BigDecimal("4.20");
 
         assertEquals(expectedPrice, totalPrice);
-
     }
 }
