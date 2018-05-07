@@ -18,9 +18,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -32,6 +39,7 @@ public class TestProductScraper {
 
     private Document productListings;
     private Elements expectedProductItems;
+    private Document productPage;
 
     @Before
     public void setup() throws IOException {
@@ -40,6 +48,9 @@ public class TestProductScraper {
 
         File productItemsHtmlFile = new ClassPathResource("ProductItems.html").getFile();
         expectedProductItems = Jsoup.parse(productItemsHtmlFile, "UTF-8").select("div.product");
+
+        File productPageHtmlFile = new ClassPathResource("ProductPage.html").getFile();
+        productPage = Jsoup.parse(productPageHtmlFile, "UTF-8");
     }
 
     @Test
@@ -102,41 +113,18 @@ public class TestProductScraper {
     }
 
     @Test
-    public void shouldConvertRelativeUrlToAbsoluteUrl() {
-        String relativeUrl = "../../shop/gb/test-product-3-200g.html";
+    public void shouldReturnProductDescriptionFromProductPage() {
+        String description = ProductScraper.getDescriptionFromProductPage(productPage);
+        String expectedDescription = "A really good Test Product";
 
-        String absoluteUrl = productScraper.convertRelativeToAbsoluteUrl("http://www.online-shop.co.uk", relativeUrl);
-        String expectedAbsoluteUrl = "http://www.online-shop.co.uk/shop/gb/test-product-3-200g.html";
-
-        assertEquals(expectedAbsoluteUrl, absoluteUrl);
+        assertEquals(expectedDescription, description);
     }
 
     @Test
-    public void shouldConvertRelativeUrlToAbsoluteUrlGivenSingleNumberRelativeUrl() {
-        String relativeUrl = "2";
+    public void shouldNotReturnSecondLineFromProductDescriptionFromProductPage() {
+        String description = ProductScraper.getDescriptionFromProductPage(productPage);
+        String unexpectedDescription = "Ignored description line";
 
-        String absoluteUrl = productScraper.convertRelativeToAbsoluteUrl("http://www.online-shop.co.uk", relativeUrl);
-        String expectedAbsoluteUrl = "http://www.online-shop.co.uk/2";
-
-        assertEquals(expectedAbsoluteUrl, absoluteUrl);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldThrowExceptionIfCreatingMalformedUrlGivenBadBaseUrl() {
-        String relativeUrl = "../../shop/gb/test-product-3-200g.html";
-
-        String absoluteUrl = productScraper.convertRelativeToAbsoluteUrl("malformedUrl", relativeUrl);
-    }
-
-    @Test
-    public void shouldReturnANewProduct() throws IOException {
-        Elements productItems = ProductScraper.getProductItemsHtmlElements(productListings);
-        Element productItem = productItems.first();
-
-        Product expectedProduct = new Product("Test Product 1 500g", "Test description", new BigDecimal("1.75"), 100);
-
-        Product product = productScraper.getProduct(productItem);
-
-        Assert.assertThat(product, samePropertyValuesAs(expectedProduct));
+        assertThat(description, not(containsString(unexpectedDescription)));
     }
 }

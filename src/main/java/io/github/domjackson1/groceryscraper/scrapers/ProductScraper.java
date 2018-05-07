@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -26,21 +27,12 @@ public class ProductScraper extends HtmlScraper {
 
     public List<Product> getProducts(String url) throws IOException {
 
-        Document productListings = getHtmlContent(url);
+        Document productListings = getHtmlDocument(url);
         Elements productItems = getProductItemsHtmlElements(productListings);
 
         List<Product> products = new ArrayList<>();
 
         return products;
-    }
-
-    private Document getHtmlContent(String url) throws IOException {
-        if (!isValidUrl(url)) {
-            LOGGER.error(BAD_URL_MESSAGE);
-            throw new IllegalArgumentException();
-        }
-
-        return Jsoup.connect(url).get();
     }
 
     public static Elements getProductItemsHtmlElements(Document productListings) {
@@ -54,7 +46,11 @@ public class ProductScraper extends HtmlScraper {
         String relativeUrl = getRelativeProductUrlFromProduct(productItem);
         String absoluteUrl = convertRelativeToAbsoluteUrl(BASE_URL, relativeUrl);
 
-        return new Product(title, "Test description", price, 100);
+        Document productPage = getHtmlDocument(absoluteUrl);
+
+        String description = getDescriptionFromProductPage(productPage);
+
+        return new Product(title, description, price, 100);
     }
 
     public static String getTitleFromProduct(Element productItem) {
@@ -81,18 +77,11 @@ public class ProductScraper extends HtmlScraper {
         return anchorElement.attr("href");
     }
 
-    public String convertRelativeToAbsoluteUrl(String baseUrl, String relativeUrl) {
+    public static String getDescriptionFromProductPage(Element productPage) {
+        Element firstDivAfterDescriptionHeader = productPage.select("h3:contains(Description) + div").first();
+        Element firstNonEmptyTextAfterDescriptionHeader = firstDivAfterDescriptionHeader.select("p:matches(^(?!\\s*$).+)").first();
 
-        relativeUrl = relativeUrl.replace("../", "");
-
-        String url = String.format("%s/%s", baseUrl, relativeUrl);
-
-        if (!isValidUrl(url)) {
-            LOGGER.error(BAD_URL_MESSAGE);
-            throw new IllegalArgumentException();
-        }
-
-        return url;
+        return firstNonEmptyTextAfterDescriptionHeader.text();
     }
 
 }
