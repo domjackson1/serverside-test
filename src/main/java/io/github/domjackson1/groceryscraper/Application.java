@@ -1,6 +1,7 @@
 package io.github.domjackson1.groceryscraper;
 
 import io.github.domjackson1.groceryscraper.scrapers.ProductScraper;
+import io.github.domjackson1.groceryscraper.scrapers.Products;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,11 +28,10 @@ public class Application implements CommandLineRunner {
     @Override
     public void run(String... args) throws IOException {
 
-        List<Product> products = productScraper.getProducts("https://jsainsburyplc.github.io/serverside-test/site/" +
+        Products products = productScraper.getProducts("https://jsainsburyplc.github.io/serverside-test/site/" +
                 "www.sainsburys.co.uk/webapp/wcs/stores/servlet/gb/groceries/berries-cherries-currants6039.html");
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.writeValue(System.out, products);
+        System.out.println(products);
 
     }
 }
