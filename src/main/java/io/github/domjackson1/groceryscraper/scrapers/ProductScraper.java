@@ -53,7 +53,12 @@ public class ProductScraper extends HtmlScraper {
 
         String description = getDescriptionFromProductPage(productPage);
 
-        return new Product(title, description, price, 100);
+        try {
+            int kcalPerHundredGrams = getKcalPerHundredGramsFromProductPage(productPage);
+            return new Product(title, description, price, kcalPerHundredGrams);
+        } catch (NoNutritionDataException e) {
+            return new Product(title, description, price);
+        }
     }
 
     public static String getTitleFromProduct(final Element productItem) {
