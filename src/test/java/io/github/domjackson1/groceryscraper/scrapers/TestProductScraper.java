@@ -1,9 +1,11 @@
 package io.github.domjackson1.groceryscraper.scrapers;
 
+import io.github.domjackson1.groceryscraper.Product;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,8 +21,12 @@ import java.math.BigDecimal;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -137,5 +143,35 @@ public class TestProductScraper {
     public void shouldThrowExceptionIfNoKcalValueFoundOnProductPage() throws NoNutritionDataException {
         int kcalPerHundredGrams = ProductScraper.getKcalPerHundredGramsFromProductPage(productTwoPage);
 
+    }
+
+    @Test
+    public void shouldReturnANewProductWithKcal() throws IOException {
+        Elements productItems = ProductScraper.getProductItemsHtmlElements(productListings);
+        Element productItem = productItems.first();
+
+        ProductScraper productScraperMock = spy(productScraper);
+        when(productScraperMock.getHtmlDocument(anyString())).thenReturn(productOnePage);
+
+        Product expectedProduct = new Product("Test Product 1 500g", "A really good Test Product", new BigDecimal("1.75"), 33);
+
+        Product product = productScraperMock.getProduct(productItem);
+
+        Assert.assertThat(product, samePropertyValuesAs(expectedProduct));
+    }
+
+    @Test
+    public void shouldReturnANewProductWithoutKcal() throws IOException {
+        ProductScraper productScraperMock = spy(productScraper);
+        when(productScraperMock.getHtmlDocument(anyString())).thenReturn(productTwoPage);
+
+        Elements productItems = ProductScraper.getProductItemsHtmlElements(productListings);
+        Element productItem = productItems.get(1);
+
+        Product expectedProduct = new Product("Test Product 2 400g", "A really good Test Product 2", new BigDecimal("2.00"));
+
+        Product product = productScraperMock.getProduct(productItem);
+
+        Assert.assertThat(product, samePropertyValuesAs(expectedProduct));
     }
 }
