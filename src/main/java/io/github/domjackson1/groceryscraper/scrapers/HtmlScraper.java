@@ -8,30 +8,37 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 @Component
 public class HtmlScraper {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    public static final String BAD_URL_MESSAGE = "Invalid URL";
-
-    public static final String BASE_URL = "https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk";
+    public static final String BAD_URL_MESSAGE = "Invalid URL created";
 
     private static final String[] schemes = {"http","https"};
     private UrlValidator urlValidator = new UrlValidator(schemes);
 
     public Document getHtmlDocument(String url) throws IOException {
-
-        if (!isValidUrl(url)) {
-            LOGGER.error(BAD_URL_MESSAGE);
-            throw new IllegalArgumentException();
-        }
-
         return Jsoup.connect(url).get();
     }
 
     public boolean isValidUrl(String url) {
         return this.urlValidator.isValid(url);
+    }
+
+    public String convertRelativeToAbsoluteUrl(String baseUrl, String relativeUrl) throws MalformedURLException {
+
+        relativeUrl = relativeUrl.replace("../", "");
+
+        String url = String.format("%s/%s", baseUrl, relativeUrl);
+
+        if (!isValidUrl(url)) {
+            LOGGER.error(String.format("%s: %s", BAD_URL_MESSAGE, url));
+            throw new MalformedURLException();
+        }
+
+        return url;
     }
 }
