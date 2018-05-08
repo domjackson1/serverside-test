@@ -2,8 +2,9 @@
 
 Spring Boot Web Scraper application with JUnit and Cucumber tests.
 
-## Run Locally
-### Build
+Use the following commands below to use Gradle to build, run and test the application.
+
+## Build
 ```sh
 $ ./gradlew build
 ```
