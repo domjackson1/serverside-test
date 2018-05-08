@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 
 @Component
@@ -16,11 +17,11 @@ public class HtmlScraper {
 
     public static final String BAD_URL_MESSAGE = "Invalid URL";
 
-    public static Document getHtmlDocument(final String url) throws Exception {
+    public static Document getHtmlDocument(final String url) throws IOException {
 
         try {
             return Jsoup.connect(url).get();
-        } catch (Exception e) {
+        } catch (IOException e) {
             LOGGER.error(String.format("%s: %s", e.getMessage(), url));
             throw e;
         }
@@ -40,7 +41,8 @@ public class HtmlScraper {
         String url = String.format("%s/%s", baseUrl, urlPath);
 
         if (!isValidUrl(url)) {
-            LOGGER.error(String.format("%s: %s", BAD_URL_MESSAGE, url));
+            String errorMessage = String.format("%s: %s", BAD_URL_MESSAGE, url);
+            LOGGER.error(errorMessage);
             throw new MalformedURLException();
         }
 

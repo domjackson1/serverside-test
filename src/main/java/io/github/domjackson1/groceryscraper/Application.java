@@ -8,8 +8,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.io.IOException;
-
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 
@@ -28,7 +26,8 @@ public class Application implements CommandLineRunner {
         Products products = productScraper.getProducts("https://jsainsburyplc.github.io/serverside-test/site/" +
                 "www.sainsburys.co.uk/webapp/wcs/stores/servlet/gb/groceries/berries-cherries-currants6039.html");
 
-        System.out.println(products);
+        String productsPrettyPrint = products.toString();
 
+        LOGGER.info(productsPrettyPrint);
     }
 }

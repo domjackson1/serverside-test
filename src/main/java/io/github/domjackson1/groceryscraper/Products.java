@@ -14,8 +14,8 @@ public class Products {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    public List<Product> results;
-    public BigDecimal total;
+    private List<Product> results;
+    private BigDecimal total;
 
     public Products() {
         this.results = new ArrayList<>();
@@ -33,6 +33,10 @@ public class Products {
 
     public BigDecimal getTotal() {
         return this.total;
+    }
+
+    public List<Product> getResults() {
+        return this.results;
     }
 
     @Override

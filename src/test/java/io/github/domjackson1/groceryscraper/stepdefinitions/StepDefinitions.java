@@ -33,12 +33,12 @@ public class StepDefinitions {
 
     @Then("^I get (\\d+) items in the array$")
     public void iGetItemsInTheArray(int expectedNumberOfProducts) throws Throwable {
-        assertEquals(expectedNumberOfProducts, products.results.size());
+        assertEquals(expectedNumberOfProducts, products.getResults().size());
     }
 
     @Then("^I get a product with \"([^\"]*)\", \"([^\"]*)\" and \"([^\"]*)\"$")
     public void iGetAProductWithCorrectInformation(String title, String description, String unitPrice) throws Throwable {
-        Optional<Product> matchingObject = products.results.stream()
+        Optional<Product> matchingObject = products.getResults().stream()
                 .filter(item -> item.getTitle().equals(title))
                 .findFirst();
 
@@ -50,7 +50,7 @@ public class StepDefinitions {
 
     @Then("^I get a product with \"([^\"]*)\" and \"([^\"]*)\"$")
     public void iGetAProductWithCorrectKcal(String title, String kcalPerHundredGrams) throws Throwable {
-        Optional<Product> matchingObject = products.results.stream()
+        Optional<Product> matchingObject = products.getResults().stream()
                 .filter(item -> item.getTitle().equals(title))
                 .findFirst();
 

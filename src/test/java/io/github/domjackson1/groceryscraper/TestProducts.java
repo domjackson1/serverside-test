@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 public class TestProducts {
 
     @Autowired
-    Products products;
+    private Products products;
 
     @Test
     public void shouldHaveCorrectTotalPriceCalculated() {

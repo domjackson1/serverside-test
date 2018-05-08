@@ -7,20 +7,18 @@ import org.apache.commons.validator.routines.CurrencyValidator;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Locale;
 
 @Component
 public class ProductScraper extends HtmlScraper {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    public static final String BASE_URL = "https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk";
+    private static final String BASE_URL = "https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk";
 
-    public Products getProducts(final String url) throws Exception {
+    public Products getProducts(final String url) throws IOException {
 
         Document productListings = getHtmlDocument(url);
         Elements productItems = getProductItemsHtmlElements(productListings);
@@ -41,7 +39,7 @@ public class ProductScraper extends HtmlScraper {
         return productListings.select("ul.productLister li.gridItem .product");
     }
 
-    public static Product getProduct(final Element productItem) throws Exception {
+    public static Product getProduct(final Element productItem) throws IOException {
         String title = getTitleFromProduct(productItem);
         BigDecimal price = getPriceFromProduct(productItem);
 
