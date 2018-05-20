@@ -15,7 +15,7 @@ public class HtmlScraper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HtmlScraper.class);
 
-    public static final String BAD_URL_MESSAGE = "Invalid URL";
+    private static final String BAD_URL_MESSAGE = "Invalid URL";
 
     public static Document getHtmlDocument(final String url) throws IOException {
 
