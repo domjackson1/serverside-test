@@ -18,24 +18,21 @@ import static org.junit.Assert.assertFalse;
 @ContextConfiguration(classes = HtmlScraper.class)
 public class TestHtmlScraper {
 
-    @Autowired
-    private HtmlScraper htmlScraper;
-
     @Test
     public void shouldReturnNotValidUrl() {
-        assertFalse(htmlScraper.isValidUrl("not_valid_url"));
+        assertFalse(HtmlScraper.isValidUrl("not_valid_url"));
     }
 
     @Test
     public void shouldReturnIsValidUrl() {
-        assertTrue(htmlScraper.isValidUrl("http://url.com"));
+        assertTrue(HtmlScraper.isValidUrl("http://url.com"));
     }
 
     @Test
     public void shouldConvertRelativeUrlToAbsoluteUrl() throws MalformedURLException {
         String relativeUrl = "../../shop/gb/test-product-3-200g.html";
 
-        String absoluteUrl = htmlScraper.convertRelativeToAbsoluteUrl("http://www.online-shop.co.uk", relativeUrl);
+        String absoluteUrl = HtmlScraper.convertRelativeToAbsoluteUrl("http://www.online-shop.co.uk", relativeUrl);
         String expectedAbsoluteUrl = "http://www.online-shop.co.uk/shop/gb/test-product-3-200g.html";
 
         assertEquals(expectedAbsoluteUrl, absoluteUrl);
@@ -45,7 +42,7 @@ public class TestHtmlScraper {
     public void shouldConvertRelativeUrlToAbsoluteUrlGivenSingleNumberRelativeUrl() throws MalformedURLException {
         String relativeUrl = "2";
 
-        String absoluteUrl = htmlScraper.convertRelativeToAbsoluteUrl("http://www.online-shop.co.uk", relativeUrl);
+        String absoluteUrl = HtmlScraper.convertRelativeToAbsoluteUrl("http://www.online-shop.co.uk", relativeUrl);
         String expectedAbsoluteUrl = "http://www.online-shop.co.uk/2";
 
         assertEquals(expectedAbsoluteUrl, absoluteUrl);
@@ -55,6 +52,6 @@ public class TestHtmlScraper {
     public void shouldThrowExceptionIfCreatingMalformedUrlGivenBadBaseUrl() throws MalformedURLException {
         String relativeUrl = "../../shop/gb/test-product-3-200g.html";
 
-        String absoluteUrl = htmlScraper.convertRelativeToAbsoluteUrl("malformedUrl", relativeUrl);
+        String absoluteUrl = HtmlScraper.convertRelativeToAbsoluteUrl("malformedUrl", relativeUrl);
     }
 }
